@@ -1,16 +1,29 @@
 import React from 'react';
 import { Users, Home, FileText, BarChart3, Award, Settings, LogOut, X } from 'lucide-react';
 import { useAuth } from '../../Context/AuthContext';
+import { useNavigate } from 'react-router-dom'
+
+
+
+
 
 const Sidebar = ({ sidebarOpen, setSidebarOpen, activeTab, setActiveTab }) => {
   const menuItems = [
     { id: 'dashboard', label: 'Dashboard', icon: Home },
-    { id: 'referrals', label: 'My Referrals', icon: FileText },
-    { id: 'analytics', label: 'Analytics', icon: BarChart3 },
-    { id: 'rewards', label: 'Rewards', icon: Award },
+   
   ];
 
- const { user } = useAuth();
+  const { logout,user } = useAuth();
+
+  let navigate = useNavigate()
+
+
+  let handlelogout = async () => {
+    logout()
+
+    navigate("/login")
+
+  }
 
   return (
     <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0`}>
@@ -36,11 +49,10 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, activeTab, setActiveTab }) => {
               <button
                 key={item.id}
                 onClick={() => setActiveTab(item.id)}
-                className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
-                  activeTab === item.id
-                    ? 'text-white bg-gradient-to-r from-indigo-600 to-purple-600'
-                    : 'text-gray-700 hover:bg-gray-100'
-                }`}
+                className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${activeTab === item.id
+                  ? 'text-white bg-gradient-to-r from-indigo-600 to-purple-600'
+                  : 'text-gray-700 hover:bg-gray-100'
+                  }`}
               >
                 <Icon className="w-5 h-5" />
                 <span className="font-medium">{item.label}</span>
@@ -64,9 +76,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, activeTab, setActiveTab }) => {
             <Settings className="w-5 h-5" />
             <span className="font-medium">Settings</span>
           </button>
-          <button className="w-full flex items-center space-x-3 px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors mt-2">
+          <button onClick={() => handlelogout()} className="w-full flex items-center space-x-3 px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors mt-2">
             <LogOut className="w-5 h-5" />
-            <span className="font-medium">Logout</span>
+            <span  className="font-medium">Logout</span>
           </button>
         </div>
       </div>

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { X, User, Mail, Phone, Briefcase, Upload, CheckCircle } from 'lucide-react';
+import { useCandidate } from '../Context/CandidateContext'
 
 const AddReferralModal = ({ isOpen, onClose }) => {
     const [formData, setFormData] = useState({
@@ -12,6 +13,7 @@ const AddReferralModal = ({ isOpen, onClose }) => {
     const [fileName, setFileName] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [success, setSuccess] = useState(false);
+    const { addReferal } = useCandidate()
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -31,29 +33,51 @@ const AddReferralModal = ({ isOpen, onClose }) => {
         }
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setIsSubmitting(true);
 
-        // Simulate API call
-        setTimeout(() => {
-            setIsSubmitting(false);
-            setSuccess(true);
+        try {
+            const response = await addReferal(formData);
 
-            // Reset form after success
-            setTimeout(() => {
-                setFormData({
-                    name: '',
-                    email: '',
-                    phone: '',
-                    jobTitle: '',
-                    resume: null
-                });
-                setFileName('');
-                setSuccess(false);
-                onClose();
-            }, 2000);
-        }, 1500);
+            console.log(response)
+
+            if (response) {
+                setSuccess(true);
+
+
+
+                setTimeout(() => {
+                    setFormData({
+                        name: '',
+                        email: '',
+                        phone: '',
+                        jobTitle: '',
+                        resume: null
+                    });
+                    setFileName('');
+
+                    
+
+                    onClose();
+
+                     setSuccess(false);
+                }, 2000);
+                return
+            }
+
+            console.log("It is Falied")
+
+           
+
+
+
+        } catch (error) {
+            console.log(error);
+            alert("Failed to submit referral. Please try again!");
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     const handleClose = () => {

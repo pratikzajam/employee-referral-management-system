@@ -40,12 +40,18 @@ let candidates = metrics?.data?.candidates || [];
     { id: 3, action: 'Candidate hired', candidate: 'Emily Davis', time: '1 day ago' },
   ];
 
-  // const filteredCandidates = candidates.filter(candidate => {
-  //   const matchesSearch = candidate.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-  //     candidate.jobTitle.toLowerCase().includes(searchTerm.toLowerCase());
-  //   const matchesFilter = filterStatus === 'All' || candidate.status === filterStatus;
-  //   return matchesSearch && matchesFilter;
-  // });
+  const filteredCandidates = (() => {
+    const q = (searchTerm || '').trim().toLowerCase();
+    return candidates.filter(candidate => {
+      const name = String(candidate.name || '').toLowerCase();
+      const job = String(candidate.jobTitle || candidate.job || '').toLowerCase();
+      const status = String(candidate.status || '').toLowerCase();
+ 
+      const matchesSearch = q === '' || name.includes(q) || job.includes(q) || status.includes(q);
+      const matchesFilter = filterStatus === 'All' || filterStatus === '' || candidate.status === filterStatus;
+      return matchesSearch && matchesFilter;
+    });
+  })();
 
   const statsConfig = [
     {
@@ -120,9 +126,13 @@ let candidates = metrics?.data?.candidates || [];
 
                   <div className="space-y-4">
                     <h2 className="text-xl font-bold text-gray-900">Recent Referrals</h2>
-                    {candidates.map(candidate => (
-                      <CandidateCard key={candidate.id} candidate={candidate} />
-                    ))}
+                    {filteredCandidates.length > 0 ? (
+                      filteredCandidates.map(candidate => (
+                        <CandidateCard key={candidate.id} candidate={candidate} />
+                      ))
+                    ) : (
+                      <p className="text-sm text-gray-500">No referrals found.</p>
+                    )}
                   </div>
                 </div>
 

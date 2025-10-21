@@ -78,7 +78,11 @@ const CandidateCard = ({ candidate }) => {
         {/* View Resume */}
         <button
           onClick={() => window.open(candidate.resume, '_blank')}
-          className="flex-1 px-4 py-2 bg-indigo-50 text-indigo-600 rounded-lg hover:bg-indigo-100 transition-colors font-medium"
+          disabled={!candidate.resume} // 👈 disable if resume is blank
+          className={`flex-1 px-4 py-2 rounded-lg font-medium transition-colors
+    ${candidate.resume
+              ? 'bg-indigo-50 text-indigo-600 hover:bg-indigo-100'
+              : 'bg-gray-200 text-gray-400 cursor-not-allowed'}`}
         >
           View Resume
         </button>

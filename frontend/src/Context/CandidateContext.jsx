@@ -18,10 +18,15 @@ export let CandidateProvider = ({ children }) => {
 
     let getmetricsData = async () => {
         try {
-            if (!user || !user._id) return;
+            if (!user) {
+                return null;
+            }
 
             let response = await axios.get(
-                `http://localhost:3000/api/matrics/getReferedCandidates/${user._id}`
+                `http://localhost:3000/api/matrics/getReferedCandidates/${user._id}`,
+                {
+                    withCredentials: true,
+                }
             );
 
             console.log("data", response.data);
@@ -36,7 +41,9 @@ export let CandidateProvider = ({ children }) => {
         try {
             setLoading(true);
             let response = await axios.delete(
-                `http://localhost:3000/api/candidate/candidates/${id}`
+                `http://localhost:3000/api/candidate/candidates/${id}`, {
+                withCredentials: true
+            }
             );
 
             console.log(response.data);
@@ -54,7 +61,10 @@ export let CandidateProvider = ({ children }) => {
     let updateCandidateStatus = async (status, id) => {
         try {
             let response = await axios.put(`http://localhost:3000/api/candidate/candidates/${id}`,
-                { status: status }
+                { status: status },
+                {
+                    withCredentials: true
+                }
             );
 
             console.log(response.data);
@@ -62,7 +72,7 @@ export let CandidateProvider = ({ children }) => {
 
             setTimeout(() => {
                 getmetricsData();
-            },1000)
+            }, 1000)
 
 
         } catch (error) {
@@ -74,13 +84,45 @@ export let CandidateProvider = ({ children }) => {
     }
 
 
-    let addReferal = async (referralData) => {
+    let addReferal = async (formData) => {
         try {
+            console.log("hii");
+            console.log(formData);
 
+            // Create a FormData object
+            const data = new FormData();
+            data.append("candidateName", formData.name);
+            data.append("email", formData.email);
+            data.append("phoneNumber", formData.phone);
+            data.append("jobTitle", formData.jobTitle);
+            data.append("resume", formData.resume);
+
+            let response = await axios.post(
+                `http://localhost:3000/api/candidate/candidates/${user._id}`,
+                data,
+                {
+                    headers: {
+                        "Content-Type": "multipart/form-data"
+                    },
+                    withCredentials: true
+                }
+            );
+
+            if (response.data.status) {
+                toast.success(response.data.message);
+                getmetricsData()
+            } else {
+                toast.error(response.data.message)
+            }
+
+            return response.data.status
         } catch (error) {
 
+            console.log(error)
+            console.log(error.response.data.message);
+            toast.error(error.response.data.message);
         }
-    }
+    };
 
 
 
@@ -94,7 +136,7 @@ export let CandidateProvider = ({ children }) => {
     }, []);
 
     return (
-        <CandidateContext.Provider value={{ metrics, deleteCandidate, updateCandidateStatus }}>
+        <CandidateContext.Provider value={{ metrics, deleteCandidate, updateCandidateStatus, addReferal }}>
             {children}
         </CandidateContext.Provider>
     );
