@@ -40,7 +40,7 @@ const AddReferralModal = ({ isOpen, onClose }) => {
         try {
             const response = await addReferal(formData);
 
-            console.log(response)
+            console.log(response.data)
 
             if (response) {
                 setSuccess(true);
