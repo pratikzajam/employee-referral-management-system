@@ -108,6 +108,8 @@ export let CandidateProvider = ({ children }) => {
                 }
             );
 
+            console.log(response.data);
+
             if (response.data.status) {
                 toast.success(response.data.message);
                 getmetricsData()
