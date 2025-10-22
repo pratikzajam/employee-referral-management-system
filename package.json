@@ -1,0 +1,19 @@
+{
+  "name": "referal_management_system",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pratikzajam/employee-referral-management-system.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pratikzajam/employee-referral-management-system/issues"
+  },
+  "homepage": "https://github.com/pratikzajam/employee-referral-management-system#readme"
+}
