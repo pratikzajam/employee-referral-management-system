@@ -23,7 +23,7 @@ export let CandidateProvider = ({ children }) => {
             }
 
             let response = await axios.get(
-                `http://localhost:3000/api/matrics/getReferedCandidates/${user._id}`,
+                `${import.meta.env.VITE_API_URL}/api/matrics/getReferedCandidates/${user._id}`,
                 {
                     withCredentials: true,
                 }
@@ -41,7 +41,7 @@ export let CandidateProvider = ({ children }) => {
         try {
             setLoading(true);
             let response = await axios.delete(
-                `http://localhost:3000/api/candidate/candidates/${id}`, {
+                `${import.meta.env.VITE_API_URL}/api/candidate/candidates/${id}`, {
                 withCredentials: true
             }
             );
@@ -60,7 +60,7 @@ export let CandidateProvider = ({ children }) => {
 
     let updateCandidateStatus = async (status, id) => {
         try {
-            let response = await axios.put(`http://localhost:3000/api/candidate/candidates/${id}`,
+            let response = await axios.put(`${import.meta.env.VITE_API_URL}/api/candidate/candidates/${id}`,
                 { status: status },
                 {
                     withCredentials: true
@@ -98,7 +98,7 @@ export let CandidateProvider = ({ children }) => {
             data.append("resume", formData.resume);
 
             let response = await axios.post(
-                `http://localhost:3000/api/candidate/candidates/${user._id}`,
+                `${import.meta.env.VITE_API_URL}/api/candidate/candidates/${user._id}`,
                 data,
                 {
                     headers: {

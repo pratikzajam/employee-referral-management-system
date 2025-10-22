@@ -24,7 +24,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     try {
       const response = await axios.post(
-        'http://localhost:3000/api/auth/login',
+        `${import.meta.env.VITE_API_URL}/api/auth/login`,
         { email, password },
         { withCredentials: true }
       );
@@ -61,7 +61,7 @@ export const AuthProvider = ({ children }) => {
   const signup = async (userData) => {
     try {
       const response = await axios.post(
-        'http://localhost:3000/api/auth/signup',
+        `${import.meta.env.VITE_API_URL}/api/auth/signup`,
         userData
       );
       const { status, message } = response.data;
